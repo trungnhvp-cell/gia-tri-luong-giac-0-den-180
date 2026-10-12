@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ôn tập – Giá trị lượng giác của góc 0° đến 180°</title>
+<style>
+/* ===================== RESET & BASE ===================== */
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+body{
+  font-family:'Segoe UI',system-ui,-apple-system,'Helvetica Neue',Arial,sans-serif;
+  background:#eef2f9;color:#1e293b;line-height:1.6;min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+}
+.hidden{display:none !important;}
+button{font-family:inherit;}
+
+/* ===================== LOGIN ===================== */
+.login-screen{
+  position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;
+  padding:20px;overflow-y:auto;
+  background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 45%,#06b6d4 100%);
+}
+.login-screen::before{
+  content:"";position:absolute;inset:0;opacity:.18;
+  background-image:radial-gradient(circle at 20% 30%,#fff 1.5px,transparent 1.5px),
+                   radial-gradient(circle at 70% 60%,#fff 1.5px,transparent 1.5px),
+                   radial-gradient(circle at 40% 80%,#fff 1.5px,transparent 1.5px);
+  background-size:120px 120px,180px 180px,90px 90px;
+}
+.login-card{
+  position:relative;background:#fff;border-radius:26px;padding:34px 26px 26px;
+  width:100%;max-width:420px;text-align:center;
+  box-shadow:0 25px 60px -15px rgba(15,23,42,.5);
+  animation:pop .45s cubic-bezier(.2,.9,.3,1.3);
+}
+@keyframes pop{from{opacity:0;transform:translateY(24px) scale(.96);}to{opacity:1;transform:none;}}
+.login-logo{
+  width:74px;height:74px;margin:0 auto 14px;border-radius:22px;
+  background:linear-gradient(135deg,#6366f1,#06b6d4);
+  display:flex;align-items:center;justify-content:center;font-size:36px;
+  box-shadow:0 12px 26px -8px rgba(99,102,241,.7);
+}
+.login-card h1{font-size:22px;line-height:1.3;color:#1e293b;margin-bottom:6px;}
+.login-sub{color:#64748b;font-size:14px;margin-bottom:24px;}
+.login-card label{display:block;text-align:left;font-weight:600;font-size:14px;color:#475569;margin-top:4px;}
+.login-card input{
+  width:100%;padding:14px 16px;border:2px solid #e2e8f0;border-radius:14px;
+  font-size:16px;margin:6px 0 16px;transition:.2s;font-family:inherit;color:#1e293b;background:#f8fafc;
+}
+.login-card input:focus{outline:none;border-color:#6366f1;background:#fff;box-shadow:0 0 0 4px rgba(99,102,241,.13);}
+.login-note{font-size:12px;color:#94a3b8;margin-top:16px;}
+
+/* ===================== BUTTONS ===================== */
+.btn-primary{
+  width:100%;padding:15px 20px;border:none;border-radius:14px;cursor:pointer;
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;
+  font-size:16px;font-weight:700;letter-spacing:.2px;
+  box-shadow:0 10px 24px -8px rgba(79,70,229,.75);
+  transition:transform .15s ease,box-shadow .15s ease,opacity .2s;
+}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 28px -8px rgba(79,70,229,.8);}
+.btn-primary:active:not(:disabled){transform:translateY(0);}
+.btn-primary:disabled{opacity:.45;cursor:not-allowed;box-shadow:none;}
+.btn-outline{
+  padding:13px 20px;border:2px solid #cbd5e1;border-radius:14px;background:#fff;
+  color:#475569;font-weight:600;font-size:15px;cursor:pointer;transition:.2s;width:100%;
+}
+.btn-outline:hover{border-color:#94a3b8;background:#f8fafc;}
+.btn-ghost{
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);color:#fff;
+  padding:8px 14px;border-radius:11px;font-size:13px;font-weight:600;cursor:pointer;
+  transition:.2s;backdrop-filter:blur(6px);white-space:nowrap;
+}
+.btn-ghost:hover{background:rgba(255,255,255,.28);}
+
+/* ===================== APP SHELL ===================== */
+.app{min-height:100vh;display:flex;flex-direction:column;padding-bottom:24px;}
+
+/* Wrapper bao trọn topbar + tabs để dính liền nhau khi cuộn */
+.header-sticky{
+  position:sticky;top:0;z-index:50;
+  box-shadow:0 4px 20px -6px rgba(79,70,229,.6);
+}
+
+.topbar{
+  background:linear-gradient(135deg,#4f46e5,#7c3aed);
+  color:#fff;padding:11px 16px 13px;
+  display:flex;flex-direction:column;gap:9px;
+}
+
+/* Dòng thông tin giáo viên – góc trên bên trái */
+.topbar-teacher{
+  font-size:11.5px;
+  font-weight:600;
+  letter-spacing:.2px;
+  opacity:.95;
+  line-height:1.4;
+  padding-bottom:7px;
+  border-bottom:1px solid rgba(255,255,255,.18);
+  word-break:break-word;
+}
+.topbar-teacher .t-label{opacity:.85;font-weight:500;}
+
+.topbar-row{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+}
+.topbar-left{display:flex;align-items:center;gap:11px;min-width:0;}
+.avatar{
+  width:42px;height:42px;flex:0 0 42px;border-radius:13px;
+  background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.35);
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;
+}
+.student-name{font-weight:700;font-size:15px;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52vw;}
+.student-class{font-size:12px;opacity:.85;}
+
+/* ===================== TABS ===================== */
+.tabs{
+  display:flex;gap:6px;padding:10px 12px;overflow-x:auto;scrollbar-width:none;
+  background:#fff;border-bottom:1px solid #e2e8f0;
+}
+.tabs::-webkit-scrollbar{display:none;}
+.tab{
+  flex:0 0 auto;padding:9px 15px;border-radius:11px;border:none;background:#f1f5f9;
+  color:#64748b;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;white-space:nowrap;
+}
+.tab:hover{background:#e2e8f0;color:#334155;}
+.tab.active{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;box-shadow:0 6px 16px -6px rgba(79,70,229,.8);}
+
+main{flex:1;padding:16px;max-width:820px;width:100%;margin:0 auto;}
+.tab-panel{display:none;animation:fade .28s ease;}
+.tab-panel.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:none;}}
+
+/* ===================== CARD ===================== */
+.card{
+  background:#fff;border-radius:20px;padding:20px;margin-bottom:16px;
+  box-shadow:0 4px 22px -10px rgba(30,41,59,.18);border:1px solid #eef2f7;
+}
+.card h2{
+  font-size:18px;margin-bottom:14px;color:#1e293b;
+  display:flex;align-items:center;gap:9px;
+}
+.card h2 .ico{font-size:20px;}
+.card h3{font-size:15.5px;margin:16px 0 8px;color:#4338ca;}
+.card h3:first-child{margin-top:0;}
+.card p{font-size:15px;color:#334155;margin-bottom:9px;}
+.card ul{margin:8px 0 8px 20px;font-size:15px;color:#334155;}
+.card li{margin-bottom:6px;}
+.formula{
+  background:linear-gradient(135deg,#eef2ff,#f5f3ff);border-left:4px solid #6366f1;
+  border-radius:10px;padding:11px 14px;margin:9px 0;font-size:15.5px;
+  color:#3730a3;font-weight:600;letter-spacing:.2px;overflow-x:auto;
+}
+.note{
+  background:#fffbeb;border-left:4px solid #f59e0b;border-radius:10px;
+  padding:11px 14px;font-size:14px;color:#78350f;margin-top:12px;
+}
+.note b{color:#b45309;}
+
+/* ===================== TABLE ===================== */
+.table-wrap{overflow-x:auto;margin:10px -6px;padding:0 6px 6px;-webkit-overflow-scrolling:touch;}
+.trig-table{border-collapse:separate;border-spacing:0;font-size:13.5px;min-width:560px;width:100%;}
+.trig-table th,.trig-table td{
+  border:1px solid #e2e8f0;padding:9px 8px;text-align:center;white-space:nowrap;
+}
+.trig-table thead th{background:#eef2ff;color:#4338ca;font-weight:700;}
+.trig-table tbody th{background:#f8fafc;color:#334155;font-weight:700;text-align:left;padding-left:12px;}
+.trig-table tbody tr:nth-child(even) td{background:#fcfdff;}
+.trig-table td{color:#1e293b;font-weight:600;}
+
+/* ===================== CHIPS ===================== */
+.chips{display:flex;flex-wrap:wrap;gap:9px;margin:12px 0 18px;}
+.chip{
+  padding:10px 15px;border-radius:13px;border:2px solid #e2e8f0;background:#fff;
+  color:#475569;font-size:14px;font-weight:600;cursor:pointer;transition:.18s;
+}
+.chip:hover{border-color:#c7d2fe;background:#f8faff;}
+.chip.active{border-color:#4f46e5;background:#eef2ff;color:#4338ca;box-shadow:0 4px 12px -5px rgba(79,70,229,.6);}
+
+/* ===================== QUIZ ===================== */
+.quiz-head{margin-bottom:14px;}
+.quiz-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;gap:10px;}
+.badge{
+  display:inline-block;background:#eef2ff;color:#4338ca;font-size:12px;font-weight:700;
+  padding:5px 11px;border-radius:20px;white-space:nowrap;
+}
+.counter{font-size:13px;font-weight:700;color:#64748b;white-space:nowrap;}
+.progress{height:9px;background:#e2e8f0;border-radius:20px;overflow:hidden;}
+.progress-bar{height:100%;background:linear-gradient(90deg,#6366f1,#06b6d4);border-radius:20px;transition:width .35s ease;}
+
+.question-card{padding:20px 18px;}
+.q-text{font-size:16.5px;line-height:1.55;color:#1e293b;margin-bottom:18px;font-weight:700;}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px;}
+.option{
+  display:flex;align-items:center;gap:12px;width:100%;text-align:left;
+  padding:13px 15px;border:2px solid #e2e8f0;border-radius:14px;background:#fff;
+  font-size:15.5px;color:#1e293b;cursor:pointer;transition:all .16s ease;font-weight:500;
+}
+.option:hover:not(:disabled){border-color:#a5b4fc;background:#f5f3ff;transform:translateX(3px);}
+.option.selected{border-color:#4f46e5;background:#eef2ff;}
+.option.correct{border-color:#10b981;background:#ecfdf5;}
+.option.wrong{border-color:#ef4444;background:#fef2f2;}
+.option.dim{opacity:.5;}
+.option:disabled{cursor:default;transform:none;}
+.opt-letter{
+  flex:0 0 30px;height:30px;border-radius:50%;background:#f1f5f9;color:#475569;
+  display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;
+}
+.option.correct .opt-letter{background:#10b981;color:#fff;}
+.option.wrong .opt-letter{background:#ef4444;color:#fff;}
+.option.selected .opt-letter{background:#4f46e5;color:#fff;}
+
+.feedback{border-radius:14px;padding:13px 15px;margin-bottom:14px;font-size:14.5px;animation:fade .25s;}
+.feedback strong{display:block;margin-bottom:5px;font-size:15px;}
+.feedback p{font-size:14px;line-height:1.55;margin:0;}
+.feedback.ok{background:#ecfdf5;border-left:4px solid #10b981;color:#065f46;}
+.feedback.no{background:#fef2f2;border-left:4px solid #ef4444;color:#991b1b;}
+
+/* ===================== RESULT ===================== */
+.result-hero{text-align:center;padding:26px 20px;}
+.score-ring{position:relative;width:170px;height:170px;margin:0 auto 14px;}
+.score-ring svg{transform:rotate(-90deg);width:170px;height:170px;}
+.ring-bg{fill:none;stroke:#e2e8f0;stroke-width:11;}
+.ring-fg{fill:none;stroke:url(#grad);stroke-width:11;stroke-linecap:round;transition:stroke-dashoffset 1s ease;}
+.score-text{
+  position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.score-text .num{font-size:42px;font-weight:900;line-height:1;background:linear-gradient(135deg,#4f46e5,#06b6d4);-webkit-background-clip:text;background-clip:text;color:transparent;}
+.score-text small{font-size:14px;color:#94a3b8;font-weight:700;margin-top:3px;}
+.result-msg{font-size:18px;font-weight:800;margin-bottom:6px;}
+.result-sub{font-size:14px;color:#64748b;}
+
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px;}
+.stat{background:#f8fafc;border-radius:14px;padding:13px 8px;text-align:center;border:1px solid #eef2f7;}
+.stat .v{font-size:20px;font-weight:800;color:#4f46e5;line-height:1.2;}
+.stat .l{font-size:11.5px;color:#64748b;margin-top:3px;font-weight:600;}
+
+.topic-row{margin-bottom:13px;}
+.topic-row .tr-top{display:flex;justify-content:space-between;font-size:13.5px;font-weight:600;color:#475569;margin-bottom:5px;}
+.topic-bar{height:9px;background:#e2e8f0;border-radius:20px;overflow:hidden;}
+.topic-bar > div{height:100%;border-radius:20px;background:linear-gradient(90deg,#6366f1,#06b6d4);transition:width .6s ease;}
+
+.review-item{
+  border-radius:14px;padding:14px;margin-bottom:11px;border:1px solid #eef2f7;background:#fcfdff;
+}
+.review-item .rq{font-size:14.5px;font-weight:700;color:#1e293b;margin-bottom:8px;line-height:1.5;}
+.review-item .ra{font-size:13.5px;margin-bottom:4px;color:#475569;}
+.review-item .ra b{font-weight:700;}
+.review-item .ra.ok b{color:#059669;}
+.review-item .ra.no b{color:#dc2626;}
+.review-item .rex{font-size:13px;color:#64748b;background:#f1f5f9;border-radius:9px;padding:8px 11px;margin-top:8px;line-height:1.5;}
+.tag-ok{display:inline-block;background:#ecfdf5;color:#059669;font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:20px;margin-left:6px;}
+.tag-no{display:inline-block;background:#fef2f2;color:#dc2626;font-size:11.5px;font-weight:800;padding:2px 9px;border-radius:20px;margin-left:6px;}
+
+/* ===================== HISTORY ===================== */
+.hist-item{
+  display:flex;align-items:center;gap:13px;padding:13px 14px;border-radius:14px;
+  background:#f8fafc;border:1px solid #eef2f7;margin-bottom:10px;
+}
+.hist-score{
+  flex:0 0 50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-weight:900;font-size:17px;color:#fff;background:linear-gradient(135deg,#4f46e5,#7c3aed);
+}
+.hist-score.good{background:linear-gradient(135deg,#059669,#10b981);}
+.hist-score.mid{background:linear-gradient(135deg,#d97706,#f59e0b);}
+.hist-score.low{background:linear-gradient(135deg,#dc2626,#ef4444);}
+.hist-info{flex:1;min-width:0;}
+.hist-info .t{font-size:14px;font-weight:700;color:#1e293b;}
+.hist-info .s{font-size:12.5px;color:#94a3b8;margin-top:2px;}
+.empty{text-align:center;color:#94a3b8;font-size:14.5px;padding:34px 10px;}
+.empty .big{font-size:44px;display:block;margin-bottom:10px;opacity:.6;}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:400px){
+  main{padding:12px;}
+  .card{padding:16px;border-radius:17px;}
+  .q-text{font-size:15.5px;}
+  .option{font-size:14.5px;padding:12px 13px;}
+  .score-ring,.score-ring svg{width:150px;height:150px;}
+  .score-text .num{font-size:36px;}
+  .topbar{padding:10px 13px 12px;}
+  .topbar-teacher{font-size:11px;}
+  .avatar{width:38px;height:38px;flex:0 0 38px;font-size:15px;}
+}
+@media (min-width:768px){
+  main{padding:22px;}
+  .card{padding:26px;}
+  .q-text{font-size:18px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ MÀN HÌNH ĐĂNG NHẬP ============ -->
+<div id="loginScreen" class="login-screen">
+  <div class="login-card">
+    <div class="login-logo">📐</div>
+    <h1>Ôn tập Giá trị lượng giác</h1>
+    <p class="login-sub">Góc α từ 0° đến 180° · Toán 10</p>
+    <form id="loginForm" autocomplete="on">
+      <label for="inpName">Họ và tên học sinh</label>
+      <input id="inpName" type="text" required maxlength="40" placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name">
+      <label for="inpClass">Lớp</label>
+      <input id="inpClass" type="text" required maxlength="15" placeholder="Ví dụ: 10A1" autocomplete="off">
+      <button type="submit" class="btn-primary">Bắt đầu học →</button>
+    </form>
+    <p class="login-note">🔒 Kết quả được lưu ngay trên thiết bị của bạn.</p>
+  </div>
+</div>
+
+<!-- ============ ỨNG DỤNG CHÍNH ============ -->
+<div id="app" class="app hidden">
+
+  <!-- Khối sticky chứa cả topbar + tabs -->
+  <div class="header-sticky">
+
+    <header class="topbar">
+      <!-- Dòng thông tin giáo viên: góc trên bên trái -->
+      <div class="topbar-teacher">
+        <span class="t-label">👨‍🏫 Giáo viên:</span>
+        <strong>Nguyễn Hữu Trung</strong> · THPT Trần Phú · ☎ 0964848989
+      </div>
+
+      <div class="topbar-row">
+        <div class="topbar-left">
+          <div class="avatar" id="avatar">A</div>
+          <div style="min-width:0">
+            <div class="student-name" id="studentName">—</div>
+            <div class="student-class" id="studentClass">—</div>
+          </div>
+        </div>
+        <button class="btn-ghost" id="btnLogout">Đổi tên</button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="theory">📘 Lý thuyết</button>
+      <button class="tab" data-tab="practice">✏️ Luyện tập</button>
+      <button class="tab" data-tab="exam">🎯 Tổng hợp</button>
+      <button class="tab" data-tab="history">📊 Kết quả</button>
+    </nav>
+
+  </div>
+
+  <main>
+
+    <!-- ============ TAB LÝ THUYẾT ============ -->
+    <section id="tab-theory" class="tab-panel active">
+
+      <div class="card">
+        <h2><span class="ico">1️⃣</span> Định nghĩa</h2>
+        <p>Với mỗi góc α (0° ≤ α ≤ 180°), ta xác định điểm <b>M</b> trên <b>nửa đường tròn đơn vị</b> sao cho ∠xOM = α. Khi đó:</p>
+        <div class="formula">sin α = tung độ của M &nbsp;·&nbsp; cos α = hoành độ của M</div>
+        <div class="formula">tan α = sin α / cos α (cos α ≠ 0) &nbsp;·&nbsp; cot α = cos α / sin α (sin α ≠ 0)</div>
+        <div class="note">💡 <b>Nhớ nhanh:</b> sin là "cao" (trục tung), cos là "ngang" (trục hoành).</div>
+      </div>
+
+      <div class="card">
+        <h2><span class="ico">2️⃣</span> Bảng giá trị lượng giác đặc biệt</h2>
+        <div class="table-wrap">
+          <table class="trig-table">
+            <thead>
+              <tr><th>α</th><th>0°</th><th>30°</th><th>45°</th><th>60°</th><th>90°</th><th>120°</th><th>135°</th><th>150°</th><th>180°</th></tr>
+            </thead>
+            <tbody>
+              <tr><th>sin α</th><td>0</td><td>1/2</td><td>√2/2</td><td>√3/2</td><td>1</td><td>√3/2</td><td>√2/2</td><td>1/2</td><td>0</td></tr>
+              <tr><th>cos α</th><td>1</td><td>√3/2</td><td>√2/2</td><td>1/2</td><td>0</td><td>−1/2</td><td>−√2/2</td><td>−√3/2</td><td>−1</td></tr>
+              <tr><th>tan α</th><td>0</td><td>√3/3</td><td>1</td><td>√3</td><td>‖</td><td>−√3</td><td>−1</td><td>−√3/3</td><td>0</td></tr>
+              <tr><th>cot α</th><td>‖</td><td>√3</td><td>1</td><td>√3/3</td><td>0</td><td>−√3/3</td><td>−1</td><td>−√3</td><td>‖</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="font-size:13px;color:#94a3b8;margin-top:6px;">‖ : không xác định</p>
+        <div class="note">
+          🖐️ <b>Mẹo bàn tay:</b> sin 0°, 30°, 45°, 60°, 90° lần lượt là
+          √0/2, √1/2, √2/2, √3/2, √4/2. Còn cos thì ngược lại.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="ico">3️⃣</span> Dấu của các giá trị lượng giác</h2>
+        <div class="formula">0° &lt; α &lt; 90° &nbsp;⟹&nbsp; sin α &gt; 0, cos α &gt; 0, tan α &gt; 0, cot α &gt; 0</div>
+        <div class="formula">90° &lt; α &lt; 180° &nbsp;⟹&nbsp; sin α &gt; 0, cos α &lt; 0, tan α &lt; 0, cot α &lt; 0</div>
+        <p>👉 Góc tù (90° &lt; α &lt; 180°) chỉ có <b>sin dương</b>, còn lại đều âm.</p>
+      </div>
+
+      <div class="card">
+        <h2><span class="ico">4️⃣</span> Hai góc bù nhau</h2>
+        <p>Nếu α + β = 180° thì:</p>
+        <div class="formula">sin(180° − α) = sin α</div>
+        <div class="formula">cos(180° − α) = −cos α</div>
+        <div class="formula">tan(180° − α) = −tan α &nbsp;·&nbsp; cot(180° − α) = −cot α</div>
+        <div class="note">🎵 <b>Thần chú:</b> "Sin thì <b>bù</b> nhau, cos thì <b>đối</b> nhau."</div>
+      </div>
+
+      <div class="card">
+        <h2><span class="ico">5️⃣</span> Hệ thức lượng giác cơ bản</h2>
+        <div class="formula">sin²α + cos²α = 1</div>
+        <div class="formula">tan α = sin α / cos α &nbsp;·&nbsp; cot α = cos α / sin α</div>
+        <div class="formula">tan α · cot α = 1 &nbsp;(sin α ≠ 0, cos α ≠ 0)</div>
+        <div class="note">
+          🔑 <b>Ứng dụng:</b> Biết sin α, dùng cos²α = 1 − sin²α để tìm cos α,
+          rồi dựa vào <b>khoảng của α</b> để chọn dấu cho đúng.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2><span class="ico">📌</span> Ghi nhớ nhanh</h2>
+        <ul>
+          <li><b>sin 30° = 1/2</b>, <b>sin 45° = √2/2</b>, <b>sin 60° = √3/2</b> — tăng dần.</li>
+          <li><b>cos</b> của các góc đó giảm dần: √3/2 → √2/2 → 1/2.</li>
+          <li>Góc <b>tù</b>: sin vẫn dương, cos chuyển thành âm.</li>
+          <li>tan 90° và cot 0°, cot 180° <b>không xác định</b>.</li>
+        </ul>
+      </div>
+
+    </section>
+
+    <!-- ============ TAB LUYỆN TẬP ============ -->
+    <section id="tab-practice" class="tab-panel">
+      <div id="practiceSetup">
+        <div class="card">
+          <h2><span class="ico">✏️</span> Luyện tập theo chủ đề</h2>
+          <p style="color:#64748b;font-size:14.5px;">Chọn một chủ đề để luyện tập. Sau mỗi câu, em sẽ nhận được phản hồi và lời giải chi tiết.</p>
+          <div class="chips" id="topicChips"></div>
+          <button class="btn-primary" id="btnStartPractice">Bắt đầu luyện tập (10 câu)</button>
+        </div>
+      </div>
+      <div id="practiceQuiz"></div>
+    </section>
+
+    <!-- ============ TAB TỔNG HỢP ============ -->
+    <section id="tab-exam" class="tab-panel">
+      <div id="examSetup">
+        <div class="card">
+          <h2><span class="ico">🎯</span> Luyện tập tổng hợp</h2>
+          <p style="color:#64748b;font-size:14.5px;">
+            Đề gồm các câu hỏi ngẫu nhiên thuộc <b>tất cả các chủ đề</b>.
+            Em sẽ <b>không</b> biết đúng/sai ngay, kết quả và lời giải sẽ hiện ra sau khi nộp bài.
+          </p>
+          <h3>Số lượng câu hỏi</h3>
+          <div class="chips" id="examCountChips">
+            <button class="chip" data-count="8">8 câu</button>
+            <button class="chip active" data-count="12">12 câu</button>
+            <button class="chip" data-count="15">15 câu</button>
+            <button class="chip" data-count="20">20 câu</button>
+          </div>
+          <button class="btn-primary" id="btnStartExam">Bắt đầu làm bài 🎯</button>
+        </div>
+      </div>
+      <div id="examQuiz"></div>
+    </section>
+
+    <!-- ============ TAB KẾT QUẢ ============ -->
+    <section id="tab-history" class="tab-panel">
+      <div class="card">
+        <h2><span class="ico">📊</span> Lịch sử học tập của em</h2>
+        <div id="historyList"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+/* ============================================================
+   TIỆN ÍCH
+============================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const pick = arr => arr[randInt(0, arr.length-1)];
+function shuffle(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){ const j = randInt(0,i); [a[i],a[j]]=[a[j],a[i]]; }
+  return a;
+}
+
+/* ============================================================
+   DỮ LIỆU NỀN
+============================================================ */
+const TABLE = {
+  0:  {sin:'0',    cos:'1',     tan:'0'},
+  30: {sin:'1/2',  cos:'√3/2',  tan:'√3/3'},
+  45: {sin:'√2/2', cos:'√2/2',  tan:'1'},
+  60: {sin:'√3/2', cos:'1/2',   tan:'√3'},
+  90: {sin:'1',    cos:'0',     tan:'Không xác định'},
+  120:{sin:'√3/2', cos:'−1/2',  tan:'−√3'},
+  135:{sin:'√2/2', cos:'−√2/2', tan:'−1'},
+  150:{sin:'1/2',  cos:'−√3/2', tan:'−√3/3'},
+  180:{sin:'0',    cos:'−1',    tan:'0'}
+};
+
+const TOPICS = {
+  special:    {name:'Góc đặc biệt',    icon:'📐'},
+  sign:       {name:'Dấu giá trị LG',  icon:'±' },
+  supplement: {name:'Hai góc bù nhau', icon:'🔄'},
+  identity:   {name:'Hệ thức cơ bản',  icon:'🔗'},
+  expression: {name:'Biểu thức',       icon:'🧮'}
+};
+
+/* ============================================================
+   SINH CÂU HỎI
+============================================================ */
+function makeOptions(correct, pool, n = 4){
+  const wrongs = shuffle([...new Set(pool)].filter(v => v !== correct)).slice(0, n-1);
+  const options = shuffle([correct, ...wrongs]);
+  return { options, answer: options.indexOf(correct) };
+}
+
+function negate(v){
+  if(v === '0' || v === 'Không xác định') return v;
+  return v.startsWith('−') ? v.slice(1) : '−' + v;
+}
+
+/* --- 1. Giá trị lượng giác của góc đặc biệt --- */
+function genSpecial(){
+  const angle = pick([0,30,45,60,90,120,135,150,180]);
+  const func  = pick(['sin','cos','tan']);
+  const correct = TABLE[angle][func];
+  const pool = Object.values(TABLE).map(o => o[func]);
+  const { options, answer } = makeOptions(correct, pool);
+
+  let explain;
+  if(angle <= 90){
+    explain = `Dùng bảng giá trị lượng giác của các góc đặc biệt: ${func} ${angle}° = ${correct}.`;
+  } else {
+    const comp = 180 - angle;
+    if(func === 'sin')
+      explain = `sin ${angle}° = sin(180° − ${angle}°) = sin ${comp}° = ${correct}.`;
+    else if(func === 'cos')
+      explain = `cos ${angle}° = −cos(180° − ${angle}°) = −cos ${comp}° = ${correct}.`;
+    else
+      explain = `tan ${angle}° = −tan(180° − ${angle}°) = −tan ${comp}° = ${correct}.`;
+  }
+  return { topic:'special', q:`Giá trị của ${func} ${angle}° bằng bao nhiêu?`, options, answer, explain };
+}
+
+/* --- 2. Dấu của giá trị lượng giác --- */
+function genSign(){
+  const obtuse = Math.random() < 0.5;
+  const cond = obtuse ? '90° < α < 180°' : '0° < α < 90°';
+  const useSinCos = Math.random() < 0.6;
+  let correct, wrongs, explain;
+
+  if(useSinCos){
+    if(obtuse){
+      correct = 'sin α > 0 và cos α < 0';
+      wrongs = ['sin α > 0 và cos α > 0','sin α < 0 và cos α < 0','sin α < 0 và cos α > 0'];
+      explain = 'Với 90° < α < 180°, điểm M trên nửa đường tròn đơn vị có tung độ dương và hoành độ âm ⟹ sin α > 0, cos α < 0.';
+    } else {
+      correct = 'sin α > 0 và cos α > 0';
+      wrongs = ['sin α > 0 và cos α < 0','sin α < 0 và cos α < 0','sin α < 0 và cos α > 0'];
+      explain = 'Với 0° < α < 90°, điểm M có tung độ và hoành độ đều dương ⟹ sin α > 0, cos α > 0.';
+    }
+  } else {
+    if(obtuse){
+      correct = 'tan α < 0 và cot α < 0';
+      wrongs = ['tan α > 0 và cot α > 0','tan α > 0 và cot α < 0','tan α < 0 và cot α > 0'];
+      explain = 'Với 90° < α < 180°: sin α > 0, cos α < 0 ⟹ tan α = sinα/cosα < 0 và cot α = cosα/sinα < 0.';
+    } else {
+      correct = 'tan α > 0 và cot α > 0';
+      wrongs = ['tan α < 0 và cot α < 0','tan α > 0 và cot α < 0','tan α < 0 và cot α > 0'];
+      explain = 'Với 0° < α < 90°: sin α > 0, cos α > 0 ⟹ tan α > 0 và cot α > 0.';
+    }
+  }
+  const options = shuffle([correct, ...wrongs]);
+  return {
+    topic:'sign',
+    q:`Cho góc α thỏa mãn ${cond}. Khẳng định nào sau đây ĐÚNG?`,
+    options, answer: options.indexOf(correct), explain
+  };
+}
+
+/* --- 3. Hai góc bù nhau --- */
+function genSupplement(){
+  if(Math.random() < 0.4){
+    const correct = 'sin α = sin β';
+    const options = shuffle([correct, 'cos α = cos β', 'tan α = tan β', 'sin α = −sin β']);
+    return {
+      topic:'supplement',
+      q:'Cho hai góc α và β có α + β = 180°. Khẳng định nào sau đây ĐÚNG?',
+      options, answer: options.indexOf(correct),
+      explain:'Hai góc bù nhau thì sin bằng nhau, còn cos, tan, cot thì đối nhau. Vậy sin α = sin β.'
+    };
+  }
+  const angle = pick([30,45,60,120,135,150]);
+  const func  = pick(['sin','cos','tan']);
+  const val   = TABLE[angle][func];
+  const correct = func === 'sin' ? val : negate(val);
+  const pool = Object.values(TABLE).map(o => o[func]).concat(
+                Object.values(TABLE).map(o => negate(o[func])));
+  const { options, answer } = makeOptions(correct, pool);
+  const signTxt = func === 'sin' ? '' : '−';
+  return {
+    topic:'supplement',
+    q:`Biết ${func} α = ${val}. Giá trị của ${func}(180° − α) bằng bao nhiêu?`,
+    options, answer,
+    explain:`Vì α và (180° − α) là hai góc bù nhau nên ${func}(180° − α) = ${signTxt}${func} α = ${correct}.`
+  };
+}
+
+/* --- 4. Hệ thức lượng giác cơ bản --- */
+function genIdentity(){
+  const triples = [[3,4,5],[5,12,13],[8,15,17],[7,24,25]];
+  const [a,b,c] = pick(triples);          // sin = a/c ; cos = b/c ; tan = a/b
+  const isAcute = Math.random() < 0.5;
+  const signCos = isAcute ? 1 : -1;
+  const cond = isAcute ? '0° < α < 90°' : '90° < α < 180°';
+  const askCos = Math.random() < 0.5;
+
+  let correct, wrongs, explain;
+
+  if(askCos){
+    correct = (signCos < 0 ? '−' : '') + b + '/' + c;
+    const opp = (signCos < 0 ? '' : '−') + b + '/' + c;
+    wrongs = [opp, a + '/' + c, a + '/' + b];
+    explain = `Áp dụng sin²α + cos²α = 1: cos²α = 1 − (${a}/${c})² = ${(c*c-a*a)}/${c*c} ⟹ |cos α| = ${b}/${c}. `
+            + (isAcute ? `Vì α là góc nhọn nên cos α > 0, suy ra cos α = ${b}/${c}.`
+                       : `Vì α là góc tù nên cos α < 0, suy ra cos α = −${b}/${c}.`);
+  } else {
+    correct = (signCos < 0 ? '−' : '') + a + '/' + b;
+    const opp = (signCos < 0 ? '' : '−') + a + '/' + b;
+    wrongs = [opp, b + '/' + a, a + '/' + c];
+    explain = `Trước hết tính cos α: cos²α = 1 − (${a}/${c})² ⟹ |cos α| = ${b}/${c}, `
+            + (isAcute ? `α nhọn nên cos α = ${b}/${c}. ` : `α tù nên cos α = −${b}/${c}. `)
+            + `Suy ra tan α = sinα/cosα = ${correct}.`;
+  }
+
+  const options = shuffle([correct, ...wrongs]);
+  return {
+    topic:'identity',
+    q:`Cho sin α = ${a}/${c} và ${cond}. Giá trị của ${askCos ? 'cos α' : 'tan α'} là bao nhiêu?`,
+    options, answer: options.indexOf(correct), explain
+  };
+}
+
+/* --- 5. Tính giá trị biểu thức --- */
+const EXPR_POOL = [
+  { q:'Tính giá trị biểu thức: A = sin 30° + sin 150°', a:'1', d:['0','1/2','√3/2'],
+    e:'sin 150° = sin(180° − 150°) = sin 30° = 1/2. Vậy A = 1/2 + 1/2 = 1.' },
+  { q:'Tính giá trị biểu thức: A = cos 120° + cos 60°', a:'0', d:['1','−1','1/2'],
+    e:'cos 120° = −cos 60° = −1/2. Vậy A = −1/2 + 1/2 = 0.' },
+  { q:'Tính giá trị biểu thức: A = sin²30° + cos²30°', a:'1', d:['0','1/2','√3/2'],
+    e:'Áp dụng hệ thức cơ bản sin²α + cos²α = 1, ta được A = 1.' },
+  { q:'Tính giá trị biểu thức: A = tan 45° + cot 45°', a:'2', d:['0','1','√3'],
+    e:'tan 45° = 1 và cot 45° = 1. Vậy A = 1 + 1 = 2.' },
+  { q:'Tính giá trị biểu thức: A = sin 90° + cos 180°', a:'0', d:['1','2','−1'],
+    e:'sin 90° = 1, cos 180° = −1. Vậy A = 1 + (−1) = 0.' },
+  { q:'Tính giá trị biểu thức: A = 2sin 30° + cos 180°', a:'0', d:['1','−1','2'],
+    e:'2sin 30° = 2·(1/2) = 1; cos 180° = −1. Vậy A = 1 − 1 = 0.' },
+  { q:'Tính giá trị biểu thức: A = sin 120° − cos 150°', a:'√3', d:['0','√3/2','−√3'],
+    e:'sin 120° = √3/2; cos 150° = −√3/2. Vậy A = √3/2 − (−√3/2) = √3.' },
+  { q:'Tính giá trị biểu thức: A = cos 135° + sin 45°', a:'0', d:['√2','−√2','√2/2'],
+    e:'cos 135° = −√2/2; sin 45° = √2/2. Vậy A = −√2/2 + √2/2 = 0.' },
+  { q:'Tính giá trị biểu thức: A = tan 135° + cot 135°', a:'−2', d:['0','2','−1'],
+    e:'tan 135° = −1 và cot 135° = −1. Vậy A = −1 + (−1) = −2.' },
+  { q:'Tính giá trị biểu thức: A = sin 0° + cos 0° + sin 90° + cos 90°', a:'2', d:['0','1','3'],
+    e:'A = 0 + 1 + 1 + 0 = 2.' },
+  { q:'Tính giá trị biểu thức: A = 3sin²60° + 3cos²60°', a:'3', d:['1','0','3/2'],
+    e:'A = 3(sin²60° + cos²60°) = 3·1 = 3.' },
+  { q:'Tính giá trị biểu thức: A = sin 150° − cos 120°', a:'1', d:['0','−1','1/2'],
+    e:'sin 150° = 1/2; cos 120° = −1/2. Vậy A = 1/2 − (−1/2) = 1.' },
+  { q:'Tính giá trị biểu thức: A = 2sin 90° − cos 180°', a:'3', d:['1','2','−1'],
+    e:'2sin 90° = 2; cos 180° = −1. Vậy A = 2 − (−1) = 3.' }
+];
+
+function genExpression(){
+  const item = pick(EXPR_POOL);
+  const options = shuffle([item.a, ...item.d]);
+  return {
+    topic:'expression', q:item.q, options,
+    answer: options.indexOf(item.a), explain:item.e
+  };
+}
+
+/* --- Bộ sinh tổng hợp --- */
+const GENERATORS = {
+  special: genSpecial,
+  sign: genSign,
+  supplement: genSupplement,
+  identity: genIdentity,
+  expression: genExpression
+};
+
+function buildQuestions(topics, count){
+  const qs = [];
+  const seen = new Set();
+  let guard = 0;
+  while(qs.length < count && guard++ < 800){
+    const t = topics[qs.length % topics.length];
+    const q = GENERATORS[t]();
+    if(seen.has(q.q)) continue;
+    seen.add(q.q);
+    qs.push(q);
+  }
+  return shuffle(qs);
+}
+
+/* ============================================================
+   TRẠNG THÁI
+============================================================ */
+const state = {
+  student: { name:'', cls:'' },
+  practiceTopic: 'all',
+  examCount: 12
+};
+
+const quiz = {
+  mode:'practice',
+  containerId:'practiceQuiz',
+  setupId:'practiceSetup',
+  config:null,
+  questions:[],
+  i:0,
+  answers:[],
+  startTime:0
+};
+
+/* ============================================================
+   ĐĂNG NHẬP
+============================================================ */
+$('#loginForm').addEventListener('submit', e => {
+  e.preventDefault();
+  const name = $('#inpName').value.trim();
+  const cls  = $('#inpClass').value.trim();
+  if(!name || !cls) return;
+  state.student = { name, cls };
+  try{
+    localStorage.setItem('tg_student', JSON.stringify(state.student));
+  }catch(err){}
+  enterApp();
+});
+
+function enterApp(){
+  $('#loginScreen').classList.add('hidden');
+  $('#app').classList.remove('hidden');
+  $('#studentName').textContent = state.student.name;
+  $('#studentClass').textContent = 'Lớp ' + state.student.cls;
+  $('#avatar').textContent = state.student.name.trim().charAt(0).toUpperCase();
+  renderHistory();
+  window.scrollTo(0,0);
+}
+
+$('#btnLogout').addEventListener('click', () => {
+  if(!confirm('Em có muốn đổi tên học sinh không? Kết quả đã lưu vẫn được giữ lại.')) return;
+  $('#app').classList.add('hidden');
+  $('#loginScreen').classList.remove('hidden');
+  $('#inpName').value = state.student.name;
+  $('#inpClass').value = state.student.cls;
+});
+
+/* Khôi phục tên đã lưu */
+(function restoreStudent(){
+  try{
+    const saved = JSON.parse(localStorage.getItem('tg_student') || 'null');
+    if(saved && saved.name && saved.cls){
+      $('#inpName').value = saved.name;
+      $('#inpClass').value = saved.cls;
+    }
+  }catch(err){}
+})();
+
+/* ============================================================
+   ĐIỀU HƯỚNG TAB
+============================================================ */
+$$('.tab').forEach(btn => {
+  btn.addEventListener('click', () => {
+    $$('.tab').forEach(b => b.classList.remove('active'));
+    $$('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    $('#tab-' + btn.dataset.tab).classList.add('active');
+    if(btn.dataset.tab === 'history') renderHistory();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+});
+
+function switchTab(name){
+  const btn = document.querySelector(`.tab[data-tab="${name}"]`);
+  if(btn) btn.click();
+}
+
+/* ============================================================
+   CHỌN CHỦ ĐỀ LUYỆN TẬP
+============================================================ */
+(function buildTopicChips(){
+  const box = $('#topicChips');
+  const all = [{ key:'all', name:'Tất cả chủ đề', icon:'🌟' }]
+    .concat(Object.keys(TOPICS).map(k => ({ key:k, name:TOPICS[k].name, icon:TOPICS[k].icon })));
+  box.innerHTML = all.map((t, idx) =>
+    `<button class="chip ${idx===0?'active':''}" data-topic="${t.key}">${t.icon} ${t.name}</button>`
+  ).join('');
+  box.addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if(!chip) return;
+    box.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    state.practiceTopic = chip.dataset.topic;
+  });
+})();
+
+/* Chọn số câu cho bài tổng hợp */
+$('#examCountChips').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  $('#examCountChips').querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+  chip.classList.add('active');
+  state.examCount = parseInt(chip.dataset.count, 10);
+});
+
+/* ============================================================
+   BẮT ĐẦU BÀI
+============================================================ */
+$('#btnStartPractice').addEventListener('click', () => {
+  const topics = state.practiceTopic === 'all' ? Object.keys(TOPICS) : [state.practiceTopic];
+  startQuiz('practice', topics, 10, 'practiceQuiz', 'practiceSetup');
+});
+
+$('#btnStartExam').addEventListener('click', () => {
+  startQuiz('exam', Object.keys(TOPICS), state.examCount, 'examQuiz', 'examSetup');
+});
+
+function startQuiz(mode, topics, count, containerId, setupId){
+  quiz.mode = mode;
+  quiz.containerId = containerId;
+  quiz.setupId = setupId;
+  quiz.config = { topics, count };
+  quiz.questions = buildQuestions(topics, count);
+  quiz.i = 0;
+  quiz.answers = new Array(quiz.questions.length).fill(null);
+  quiz.startTime = Date.now();
+
+  $('#' + setupId).classList.add('hidden');
+  renderQuiz();
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+/* ============================================================
+   HIỂN THỊ CÂU HỎI
+============================================================ */
+function renderQuiz(){
+  const box = document.getElementById(quiz.containerId);
+  const q = quiz.questions[quiz.i];
+  const total = quiz.questions.length;
+  const sel = quiz.answers[quiz.i];
+  const isPractice = quiz.mode === 'practice';
+  const answered = sel !== null;
+  const showFb = isPractice && answered;
+  const pct = (quiz.i / total) * 100;
+  const isLast = quiz.i + 1 >= total;
+
+  let optionsHtml = q.options.map((o, i) => {
+    let cls = 'option';
+    if(showFb){
+      if(i === q.answer) cls += ' correct';
+      else if(i === sel) cls += ' wrong';
+      else cls += ' dim';
+    } else if(i === sel){
+      cls += ' selected';
+    }
+    return `<button class="${cls}" data-i="${i}" ${showFb ? 'disabled' : ''}>
+              <span class="opt-letter">${'ABCD'[i]}</span>
+              <span class="opt-text">${o}</span>
+            </button>`;
+  }).join('');
+
+  let fbHtml = '';
+  if(showFb){
+    const ok = sel === q.answer;
+    fbHtml = `<div class="feedback ${ok ? 'ok' : 'no'}">
+                <strong>${ok ? '✓ Chính xác!' : '✗ Chưa đúng'}</strong>
+                <p>${q.explain}</p>
+              </div>`;
+  }
+
+  let nextHtml = '';
+  if(answered){
+    nextHtml = `<button class="btn-primary" id="btnNext">
+                  ${isLast ? 'Xem kết quả 🎉' : 'Câu tiếp theo →'}
+                </button>`;
+  }
+
+  box.innerHTML = `
+    <div class="quiz-head">
+      <div class="quiz-meta">
+        <span class="badge">${TOPICS[q.topic].icon} ${TOPICS[q.topic].name}</span>
+        <span class="counter">Câu ${quiz.i + 1}/${total}</span>
+      </div>
+      <div class="progress"><div class="progress-bar" style="width:${pct}%"></div></div>
+    </div>
+    <div class="card question-card">
+      <h3 class="q-text">${q.q}</h3>
+      <div class="options">${optionsHtml}</div>
+      ${fbHtml}
+      ${nextHtml}
+    </div>
+  `;
+
+  box.querySelectorAll('.option').forEach(btn => {
+    btn.addEventListener('click', () => selectOption(parseInt(btn.dataset.i, 10)));
+  });
+  const nextBtn = box.querySelector('#btnNext');
+  if(nextBtn) nextBtn.addEventListener('click', nextQuestion);
+}
+
+function selectOption(idx){
+  if(quiz.mode === 'practice' && quiz.answers[quiz.i] !== null) return;
+  quiz.answers[quiz.i] = idx;
+  renderQuiz();
+}
+
+function nextQuestion(){
+  if(quiz.i + 1 < quiz.questions.length){
+    quiz.i++;
+    renderQuiz();
+    window.scrollTo({ top:0, behavior:'smooth' });
+  } else {
+    finishQuiz();
+  }
+}
+
+/* ============================================================
+   KẾT THÚC & THỐNG KÊ
+============================================================ */
+function finishQuiz(){
+  const total = quiz.questions.length;
+  let correct = 0;
+  const topicStats = {};
+
+  quiz.questions.forEach((q, i) => {
+    const ok = quiz.answers[i] === q.answer;
+    if(ok) correct++;
+    if(!topicStats[q.topic]) topicStats[q.topic] = { c:0, t:0 };
+    topicStats[q.topic].t++;
+    if(ok) topicStats[q.topic].c++;
+  });
+
+  const score10 = Math.round((correct / total) * 100) / 10;
+  const elapsed = Math.round((Date.now() - quiz.startTime) / 1000);
+
+  saveHistory({
+    name: state.student.name,
+    cls: state.student.cls,
+    mode: quiz.mode,
+    score: score10,
+    correct, total,
+    time: elapsed,
+    date: new Date().toISOString()
+  });
+
+  renderResults({ correct, total, score10, topicStats, elapsed });
+  window.scrollTo({ top:0, behavior:'smooth' });
+}
+
+function renderResults({ correct, total, score10, topicStats, elapsed }){
+  const box = document.getElementById(quiz.containerId);
+  const pct = correct / total;
+  const CIRC = 2 * Math.PI * 52;   // chu vi vòng tròn r = 52
+  const offset = CIRC * (1 - pct);
+
+  let msg, color;
+  if(pct >= 0.9){ msg = '🏆 Xuất sắc!'; }
+  else if(pct >= 0.75){ msg = '🌟 Rất tốt!'; }
+  else if(pct >= 0.5){ msg = '💪 Cố gắng thêm nhé!'; }
+  else { msg = '📚 Cần ôn lại lý thuyết!'; }
+
+  const mm = String(Math.floor(elapsed / 60)).padStart(2,'0');
+  const ss = String(elapsed % 60).padStart(2,'0');
+
+  // Thống kê theo chủ đề
+  const topicRows = Object.keys(topicStats).map(k => {
+    const s = topicStats[k];
+    const p = Math.round((s.c / s.t) * 100);
+    return `<div class="topic-row">
+              <div class="tr-top">
+                <span>${TOPICS[k].icon} ${TOPICS[k].name}</span>
+                <span>${s.c}/${s.t} câu</span>
+              </div>
+              <div class="topic-bar"><div style="width:${p}%"></div></div>
+            </div>`;
+  }).join('');
+
+  // Xem lại bài làm
+  const reviewHtml = quiz.questions.map((q, i) => {
+    const sel = quiz.answers[i];
+    const ok = sel === q.answer;
+    const yourAns = sel === null ? '(chưa trả lời)' : q.options[sel];
+    const rightAns = q.options[q.answer];
+    return `<div class="review-item">
+              <div class="rq">Câu ${i+1}. ${q.q}
+                <span class="${ok ? 'tag-ok' : 'tag-no'}">${ok ? 'Đúng' : 'Sai'}</span>
+              </div>
+              <div class="ra ${ok ? 'ok' : 'no'}">Em chọn: <b>${yourAns}</b></div>
+              ${ok ? '' : `<div class="ra ok">Đáp án đúng: <b>${rightAns}</b></div>`}
+              <div class="rex">💡 ${q.explain}</div>
+            </div>`;
+  }).join('');
+
+  box.innerHTML = `
+    <div class="card result-hero">
+      <div class="score-ring">
+        <svg viewBox="0 0 120 120">
+          <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#4f46e5"/>
+              <stop offset="100%" stop-color="#06b6d4"/>
+            </linearGradient>
+          </defs>
+          <circle class="ring-bg" cx="60" cy="60" r="52"/>
+          <circle class="ring-fg" cx="60" cy="60" r="52"
+                  style="stroke-dasharray:${CIRC};stroke-dashoffset:${offset}"/>
+        </svg>
+        <div class="score-text">
+          <span class="num">${score10}</span>
+          <small>điểm / 10</small>
+        </div>
+      </div>
+      <div class="result-msg">${msg}</div>
+      <div class="result-sub">Em trả lời đúng ${correct}/${total} câu</div>
+
+      <div class="stat-grid">
+        <div class="stat"><div class="v">${correct}</div><div class="l">Câu đúng</div></div>
+        <div class="stat"><div class="v">${total - correct}</div><div class="l">Câu sai</div></div>
+        <div class="stat"><div class="v">${mm}:${ss}</div><div class="l">Thời gian</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2><span class="ico">📈</span> Kết quả theo chủ đề</h2>
+      ${topicRows}
+    </div>
+
+    <div class="card">
+      <h2><span class="ico">🔍</span> Xem lại bài làm</h2>
+      ${reviewHtml}
+    </div>
+
+    <div class="card" style="display:flex;flex-direction:column;gap:11px;">
+      <button class="btn-primary" id="btnRetry">🔄 Làm lại bài mới</button>
+      <button class="btn-outline" id="btnBackSetup">↩️ Chọn chủ đề khác</button>
+    </div>
+  `;
+
+  box.querySelector('#btnRetry').addEventListener('click', () => {
+    startQuiz(quiz.mode, quiz.config.topics, quiz.config.count, quiz.containerId, quiz.setupId);
+  });
+  box.querySelector('#btnBackSetup').addEventListener('click', () => {
+    box.innerHTML = '';
+    $('#' + quiz.setupId).classList.remove('hidden');
+    window.scrollTo({ top:0, behavior:'smooth' });
+  });
+}
+
+/* ============================================================
+   LƯU & HIỂN THỊ LỊCH SỬ
+============================================================ */
+function saveHistory(record){
+  try{
+    const key = 'tg_history_' + state.student.name.toLowerCase() + '_' + state.student.cls.toLowerCase();
+    const list = JSON.parse(localStorage.getItem(key) || '[]');
+    list.unshift(record);
+    localStorage.setItem(key, JSON.stringify(list.slice(0, 30)));
+  }catch(err){ console.warn('Không lưu được lịch sử', err); }
+}
+
+function loadHistory(){
+  try{
+    const key = 'tg_history_' + state.student.name.toLowerCase() + '_' + state.student.cls.toLowerCase();
+    return JSON.parse(localStorage.getItem(key) || '[]');
+  }catch(err){ return []; }
+}
+
+function renderHistory(){
+  const box = $('#historyList');
+  const list = loadHistory();
+
+  if(!list.length){
+    box.innerHTML = `<div class="empty">
+        <span class="big">📭</span>
+        Chưa có kết quả nào.<br>Hãy bắt đầu luyện tập nhé!
+      </div>`;
+    return;
+  }
+
+  // Thống kê tổng quan
+  const totalSessions = list.length;
+  const avgScore = (list.reduce((s, r) => s + r.score, 0) / totalSessions).toFixed(1);
+  const bestScore = Math.max(...list.map(r => r.score)).toFixed(1);
+  const totalCorrect = list.reduce((s, r) => s + (r.correct || 0), 0);
+  const totalQuestions = list.reduce((s, r) => s + (r.total || 0), 0);
+
+  const overviewHtml = `
+    <div class="stat-grid" style="margin-bottom:16px;">
+      <div class="stat"><div class="v">${totalSessions}</div><div class="l">Lần làm bài</div></div>
+      <div class="stat"><div class="v">${avgScore}</div><div class="l">Điểm TB</div></div>
+      <div class="stat"><div class="v">${bestScore}</div><div class="l">Điểm cao nhất</div></div>
+    </div>
+    <div class="stat-grid" style="margin-bottom:18px;">
+      <div class="stat"><div class="v">${totalCorrect}</div><div class="l">Câu đúng</div></div>
+      <div class="stat"><div class="v">${totalQuestions - totalCorrect}</div><div class="l">Câu sai</div></div>
+      <div class="stat"><div class="v">${totalQuestions}</div><div class="l">Tổng câu</div></div>
+    </div>
+  `;
+
+  // Danh sách chi tiết
+  const itemsHtml = list.map(r => {
+    let cls = 'hist-score';
+    if(r.score >= 8) cls += ' good';
+    else if(r.score >= 5) cls += ' mid';
+    else cls += ' low';
+
+    const modeName = r.mode === 'exam' ? '🎯 Tổng hợp' : '✏️ Luyện tập';
+    const d = new Date(r.date);
+    const dateStr = `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}/${d.getFullYear()}`
+                  + ` · ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const mm = String(Math.floor((r.time || 0) / 60)).padStart(2,'0');
+    const ss = String((r.time || 0) % 60).padStart(2,'0');
+
+    return `<div class="hist-item">
+              <div class="${cls}">${r.score}</div>
+              <div class="hist-info">
+                <div class="t">${modeName} · Đúng ${r.correct}/${r.total}</div>
+                <div class="s">🕐 ${dateStr} · ⏱ ${mm}:${ss}</div>
+              </div>
+            </div>`;
+  }).join('');
+
+  box.innerHTML = overviewHtml + itemsHtml;
+}
+
+/* ============================================================
+   KHỞI TẠO
+============================================================ */
+(function autoFocus(){
+  const saved = (() => {
+    try { return JSON.parse(localStorage.getItem('tg_student') || 'null'); }
+    catch(e){ return null; }
+  })();
+  if(saved && saved.name && saved.cls){
+    setTimeout(() => {
+      const btn = document.querySelector('#loginForm button[type="submit"]');
+      if(btn) btn.focus();
+    }, 200);
+  } else {
+    setTimeout(() => {
+      const inp = document.getElementById('inpName');
+      if(inp) inp.focus();
+    }, 200);
+  }
+})();
+</script>
+</body>
+</html>
